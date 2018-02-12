@@ -1,0 +1,20 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: README
+#+DATE: <2018-02-12 Mon>
+#+AUTHOR: Maximilian Diefenbach
+#+EMAIL: maximilian.diefenbach@tum.de
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 25.3.1 (Org mode 9.0.4)
+
+* Description
+  commandline tool to extract bibtex entries
+  for ISMRM abstracts from
+  https://dev.ismrm.org
+
+* License
+  #+INCLUDE: "./LISENCE"
+
