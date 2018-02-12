@@ -1,6 +1,6 @@
 #+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t broken-links:nil c:nil creator:nil
-#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
-#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:nil
+#+OPTIONS: timestamp:t title:t toc:nil todo:t |:t
 #+TITLE: README
 #+DATE: <2018-02-12 Mon>
 #+AUTHOR: Maximilian Diefenbach
@@ -15,6 +15,20 @@
   for ISMRM abstracts from
   https://dev.ismrm.org
 
+  
+* Usage
+  #+BEGIN_SRC sh
+    python citeISMRM.py -y 2017 -n 850 # prints bibtex entry
+                                       # from 2017 abstract #0850 to stdout
+
+    python citeISMRM.py -y 2017 -n 850 -w abstract.bib
+    # writes bibtex entry to file abstract.bib
+
+    python citeISMRM.py -y 2017 -n 850 -a bibliography.bib
+    # appends bibtex entry to file bibliography.bib
+  #+END_SRC
+  
+
 * License
-  #+INCLUDE: "./LISENCE"
+  #+INCLUDE: "./LICENSE"
 
