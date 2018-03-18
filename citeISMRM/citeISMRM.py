@@ -8,23 +8,23 @@ from bibtexparser.bwriter import BibTexWriter
 import webbrowser
 
 
-def citeISMRM():
+def main():
     """
     commandline tool to extract bibtex entries
     for ISMRM abstracts from
     https://dev.ismrm.org
 
     example usage:
-    $ python citeISMRM.py -y 2017 -n 850 # prints bibtex entry
+    $ python main.py -y 2017 -n 850 # prints bibtex entry
                                          # from 2017 abstract #0850 to stdout
 
-    $ python citeISMRM.py -y 2017 -n 850 -w abstract.bib
+    $ python main.py -y 2017 -n 850 -w abstract.bib
     # writes bibtex entry to file abstract.bib
 
-    $ python citeISMRM.py -y 2017 -n 850 -a bibliography.bib
+    $ python main.py -y 2017 -n 850 -a bibliography.bib
     # appends bibtex entry to file bibliography.bib
 
-    see $ python citeISMRM.py --help for more
+    see $ python main.py --help for more
     """
     parser = argparse.ArgumentParser(
         description='Create bibtex for ISMRM abstract.')
@@ -36,6 +36,11 @@ def citeISMRM():
     parser.add_argument('-wd', '--write-default', action='store_true')
     parser.add_argument('-a', '--append', help='append to file')
     args = parser.parse_args()
+
+    if args.link is None and \
+       (args.year is None and args.number is None):
+        parser.print_help()
+        return
 
     if args.link:
         link = args.link
@@ -84,12 +89,12 @@ def getAbstractDictFromUrl(url):
                   'for Magnetic Resonance in Medicine'
         if year == '2011':
             title = soup.find('h1').string.replace('\n ', '')
-            authors = soup.find('p', {'class': 'ISMRMAuthors'}).get_text()
+            author = soup.find('p', {'class': 'ISMRMAuthors'}).get_text()
             volume = 19
             address = "Montreal, Canada"
         elif year == '2012':
             title = soup.find('h1').string.replace('\n ', '')
-            authors = soup.find('p', {'class': 'ISMRMAuthors'}).get_text()
+            author = soup.find('p', {'class': 'ISMRMAuthors'}).get_text()
             volume = 20
             address = "Melbourne, Australia"
         elif year == '2013':
@@ -97,24 +102,24 @@ def getAbstractDictFromUrl(url):
             raise NameError('not yet determined? year {}'.format(year))
         elif year == '2014':
             title = soup.find('h1').string.replace('\n ', '')
-            authors = soup.body.h1.findNext('div').\
+            author = soup.body.h1.findNext('div').\
                 get_text().replace('  ', '').replace('\t', '')
             volume = 22
             address = "Milan, Italy"
         elif year == '2015':
             title = soup.find('h1').string.replace('\n ', '')
-            authors = soup.body.h1.findNext('div').\
+            author = soup.body.h1.findNext('div').\
                 get_text().replace('  ', '').replace('\t', '')
             volume = 23
             address = "Toronta, Canada"
         elif year == '2016':
             title = soup.find('h1').string
-            authors = soup.find(id='affAuthers').get_text()
+            author = soup.find(id='affAuthers').get_text()
             volume = 24
             address = "Singapore"
         elif year == '2017':
             title = soup.find('h1').string
-            authors = soup.find(id='affAuthers').get_text()
+            author = soup.find(id='affAuthers').get_text()
             volume = 25
             address = "Honolulu, Hawaii"
         else:
@@ -123,7 +128,7 @@ def getAbstractDictFromUrl(url):
         if title is None:
             raise NameError('abstract {} {} not found.'.format(year, pages))
         abstractDict = {'title': title,
-                        'authors': ''.join(c for c in authors
+                        'author': ''.join(c for c in author
                                            if not c.isdigit()),
                         'year': year,
                         'volume': str(volume),
@@ -132,12 +137,15 @@ def getAbstractDictFromUrl(url):
                         'pages': pages,
                         'url': url}
         abstractDict['ENTRYTYPE'] = 'inproceedings'
-        abstractDict['ID'] = abstractDict['authors'].\
+        abstractDict['ID'] = abstractDict['author'].\
             split(',')[0].split(' ')[-1] + \
             '_ISMRM' + abstractDict['year'] + '_' + \
             abstractDict['pages']
         abstractDict['title'] = '{' + abstractDict['title'] + '}'
-        abstractDict['authors'] = abstractDict['authors'].replace(',', ' and')
+        abstractDict['author'] = abstractDict['author'].\
+                                 replace(',', ' and').\
+                                 replace('and and', 'and').\
+                                 replace('  and', ' and')
         abstractDict['booktitle'] = 'Proceedings ' + abstractDict['volume'] + \
                                     '. ' + abstractDict['journal']
         abstractDict['publisher'] = '\\url{' + abstractDict['url'] + '}'
@@ -162,4 +170,4 @@ def getBibtexStrFromAbstractDict(abstractDict):
 
 
 if __name__ == '__main__':
-    citeISMRM()
+    main()

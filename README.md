@@ -7,15 +7,20 @@ for ISMRM abstracts from
 <https://dev.ismrm.org>
 
 
+# Installation
+
+    python setup.py install
+
+
 # Usage
 
-    python citeISMRM.py -y 2017 -n 850 # prints bibtex entry
-                                       # from 2017 abstract #0850 to stdout
+    citeISMRM -y 2017 -n 850 # prints bibtex entry
+                             # from 2017 abstract #0850 to stdout
     
-    python citeISMRM.py -y 2017 -n 850 -w abstract.bib
+    citeISMRM -y 2017 -n 850 -w abstract.bib
     # writes bibtex entry to file abstract.bib
     
-    python citeISMRM.py -y 2017 -n 850 -a bibliography.bib
+    citeISMRM -y 2017 -n 850 -a bibliography.bib
     # appends bibtex entry to file bibliography.bib
 
 
