@@ -12,7 +12,7 @@ def main():
     """
     commandline tool to extract bibtex entries
     for ISMRM abstracts from
-    https://dev.ismrm.org
+    https://archive.ismrm.org
 
     example usage:
     $ python main.py -y 2017 -n 850 # prints bibtex entry
