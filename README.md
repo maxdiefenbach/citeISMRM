@@ -4,7 +4,7 @@
 
 commandline tool to extract bibtex entries
 for ISMRM abstracts from
-<https://archive.ismrm.org>
+<http://archive.ismrm.org>
 
 
 # Installation
