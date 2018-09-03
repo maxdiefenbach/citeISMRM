@@ -67,7 +67,7 @@ def main():
     if filemode and filename:
         with open(filename, filemode) as f:
             f.write(bibtex_str)
-        print('Wrote bibtex to file {}.'.format(bibtex_str, filename), end='')
+        print('Wrote bibtex to file {}.'.format(filename), end='')
     else:
         print(bibtex_str, end='')
 
@@ -83,8 +83,8 @@ def getAbstractDictFromUrl(url):
     else:
         html = urllib.request.urlopen(url).read()
         soup = BeautifulSoup(html, 'lxml')
-        year = url[21:25]
-        pages = url[26:30]
+        year = url.split('/')[-2]
+        pages = url.split('/')[-1][:-5]
         journal = 'Annual Meeting International Society ' \
                   'for Magnetic Resonance in Medicine'
         if year == '2011':
@@ -122,6 +122,11 @@ def getAbstractDictFromUrl(url):
             author = soup.find(id='affAuthers').get_text()
             volume = 25
             address = "Honolulu, Hawaii"
+        elif year == '2018':
+            title = soup.find('h1').string
+            author = soup.find(id='affAuthers').get_text()
+            volume = 26
+            address = "Paris, France"
         else:
             webbrowser.open(url)
             raise NameError('not yet determined? year {}'.format(year))
@@ -153,7 +158,7 @@ def getAbstractDictFromUrl(url):
 
 
 def getAbstractUrl(year, abstractNumber):
-    BASEURL = 'http://dev.ismrm.org/'
+    BASEURL = 'http://archive.ismrm.org/'
     abstractNumberStr = str(abstractNumber)
     abstractNumberStr = (4 - len(abstractNumberStr)) * '0' + abstractNumberStr
     return BASEURL + str(year) + '/' + abstractNumberStr + '.html'
