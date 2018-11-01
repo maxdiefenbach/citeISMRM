@@ -99,7 +99,11 @@ def getAbstractDictFromUrl(url):
             address = "Melbourne, Australia"
         elif year == '2013':
             webbrowser.open(url)
-            raise NameError('not yet determined? year {}'.format(year))
+            title = soup.find('h1').string.replace('\n ', '')
+            author = soup.find('p', {'class': 'MsoNormal'}).get_text().replace('\n ', '').lstrip(' ')
+            print(soup.find('p', {'class': 'MsoNormal'}).get_text())
+            volume = 21
+            address = "Salt Lake City, Utah, USA"
         elif year == '2014':
             title = soup.find('h1').string.replace('\n ', '')
             author = soup.body.h1.findNext('div').\
@@ -121,7 +125,7 @@ def getAbstractDictFromUrl(url):
             title = soup.find('h1').string
             author = soup.find(id='affAuthers').get_text()
             volume = 25
-            address = "Honolulu, Hawaii"
+            address = "Honolulu, Hawaii, USA"
         elif year == '2018':
             title = soup.find('h1').string
             author = soup.find(id='affAuthers').get_text()
@@ -134,7 +138,7 @@ def getAbstractDictFromUrl(url):
             raise NameError('abstract {} {} not found.'.format(year, pages))
         abstractDict = {'title': title,
                         'author': ''.join(c for c in author
-                                           if not c.isdigit()),
+                                           if not (c.isdigit() or (c == ','))), # exclude also #,# only values
                         'year': year,
                         'volume': str(volume),
                         'journal': journal,
