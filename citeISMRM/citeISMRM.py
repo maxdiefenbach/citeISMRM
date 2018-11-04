@@ -16,7 +16,7 @@ def main():
 
     example usage:
     $ python main.py -y 2017 -n 850 # prints bibtex entry
-                                         # from 2017 abstract #0850 to stdout
+                                    # from 2017 abstract #0850 to stdout
 
     $ python main.py -y 2017 -n 850 -w abstract.bib
     # writes bibtex entry to file abstract.bib
@@ -24,7 +24,7 @@ def main():
     $ python main.py -y 2017 -n 850 -a bibliography.bib
     # appends bibtex entry to file bibliography.bib
 
-    see $ python main.py --help for more
+    see $ citeISMRM --help for more
     """
     parser = argparse.ArgumentParser(
         description='Create bibtex for ISMRM abstract.')
@@ -67,7 +67,7 @@ def main():
     if filemode and filename:
         with open(filename, filemode) as f:
             f.write(bibtex_str)
-        print('Wrote bibtex to file {}.'.format(filename), end='')
+        print('Wrote bibtex entry to file {}.'.format(filename))
     else:
         print(bibtex_str, end='')
 
