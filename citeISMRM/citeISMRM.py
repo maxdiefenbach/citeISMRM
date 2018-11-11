@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from bibtexparser.bibdatabase import BibDatabase
 from bibtexparser.bwriter import BibTexWriter
 import webbrowser
+import re
 
 
 def main():
@@ -98,16 +99,15 @@ def getAbstractDictFromUrl(url):
             volume = 20
             address = "Melbourne, Australia"
         elif year == '2013':
-            webbrowser.open(url)
             title = soup.find('h1').string.replace('\n ', '')
-            author = soup.find('p', {'class': 'MsoNormal'}).get_text().replace('\n ', '').lstrip(' ')
-            print(soup.find('p', {'class': 'MsoNormal'}).get_text())
+            author = soup.find('p', {'class': 'MsoNormal'}).get_text().\
+                replace('\n', '')
             volume = 21
             address = "Salt Lake City, Utah, USA"
         elif year == '2014':
             title = soup.find('h1').string.replace('\n ', '')
-            author = soup.body.h1.findNext('div').\
-                get_text().replace('  ', '').replace('\t', '')
+            author = soup.body.h1.findNext('div').get_text().\
+                replace('  ', '').replace('\t', '')
             volume = 22
             address = "Milan, Italy"
         elif year == '2015':
@@ -134,11 +134,12 @@ def getAbstractDictFromUrl(url):
         else:
             webbrowser.open(url)
             raise NameError('not yet determined? year {}'.format(year))
+        # extract author names
+        author = re.findall(r'\b(?:[a-zA-Z.\s]*[a-zA-Z]+)', author)
         if title is None:
             raise NameError('abstract {} {} not found.'.format(year, pages))
-        abstractDict = {'title': title,
-                        'author': ''.join(c for c in author
-                                           if not (c.isdigit() or (c == ','))), # exclude also #,# only values
+        abstractDict = {'title': '{' + title + '}',
+                        'author': ' and '.join(c for c in author).replace('and and', 'and'),
                         'year': year,
                         'volume': str(volume),
                         'journal': journal,
@@ -146,15 +147,9 @@ def getAbstractDictFromUrl(url):
                         'pages': pages,
                         'url': url}
         abstractDict['ENTRYTYPE'] = 'inproceedings'
-        abstractDict['ID'] = abstractDict['author'].\
-            split(',')[0].split(' ')[-1] + \
+        abstractDict['ID'] = author[0].split(' ')[-1] + \
             '_ISMRM' + abstractDict['year'] + '_' + \
             abstractDict['pages']
-        abstractDict['title'] = '{' + abstractDict['title'] + '}'
-        abstractDict['author'] = abstractDict['author'].\
-                                 replace(',', ' and').\
-                                 replace('and and', 'and').\
-                                 replace('  and', ' and')
         abstractDict['booktitle'] = 'Proceedings ' + abstractDict['volume'] + \
                                     '. ' + abstractDict['journal']
         abstractDict['publisher'] = '\\url{' + abstractDict['url'] + '}'
