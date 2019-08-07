@@ -127,6 +127,11 @@ def getAbstractDictFromUrl(url):
             author = soup.find(id='affAuthers').get_text()
             volume = 26
             address = "Paris, France"
+        elif year == '2019':
+            title = soup.find('h1').string
+            author = soup.find(id='affAuthers').get_text()
+            volume = 27
+            address = "Montreal, Canada"
         else:
             webbrowser.open(url)
             raise NameError('not yet determined? year {}'.format(year))
