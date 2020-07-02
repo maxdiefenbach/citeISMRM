@@ -111,7 +111,7 @@ def getAbstractDictFromUrl(url):
             author = soup.body.h1.findNext('div').\
                 get_text().replace('  ', '').replace('\t', '')
             volume = 23
-            address = "Toronta, Canada"
+            address = "Toronto, Canada"
         elif year == '2016':
             title = soup.find('h1').string
             author = soup.find(id='affAuthers').get_text()
